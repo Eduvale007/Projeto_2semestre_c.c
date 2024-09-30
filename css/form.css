@@ -14,7 +14,7 @@
     padding: 2rem;
     border-radius: 20px;
     position: relative;
-    background-color: #1a1a1a;
+    background-color: #f8f8f8;
     color: #fff;
     border: 1px solid #333;
   }
@@ -27,7 +27,7 @@
     display: flex;
     align-items: center;
     padding-left: 30px;
-    color: #00bfff;
+    color: #10244e;
   }
   
   .title::before {
@@ -49,7 +49,7 @@
     width: 16px;
     border-radius: 50%;
     left: 0px;
-    background-color: #00bfff;
+    background-color: #2600ff;
   }
   
   .message, 
@@ -63,11 +63,11 @@
   }
   
   .signin a:hover {
-    text-decoration: underline royalblue;
+    text-decoration: underline #10244e;
   }
   
   .signin a {
-    color: #00bfff;
+    color: #10244e;
   }
   
   .flex {
@@ -81,7 +81,7 @@
   }
   
   .form label .input {
-    background-color: #333;
+    background-color: #8f8b8b;
     color: #fff;
     width: 100%;
     padding: 20px 05px 05px 10px;
@@ -107,7 +107,7 @@
   
   .form label .input:focus + span,
   .form label .input:valid + span {
-    color: #00bfff;
+    color: #10244e;
     top: 0px;
     font-size: 0.7em;
     font-weight: 600;
@@ -125,11 +125,11 @@
     color: #fff;
     font-size: 16px;
     transform: .3s ease;
-    background-color: #00bfff;
+    background-color: #10244e;
   }
   
   .submit:hover {
-    background-color: #00bfff96;
+    background-color: #000000cb;
   }
   
   @keyframes pulse {
@@ -146,25 +146,25 @@
 
   @media screen and (max-width:750px) {
     .main__form {
-        padding: 2rem; /* Reduzir o padding para telas menores */
+        padding: 2rem; 
       }
     
       .form {
-        padding: 1rem; /* Reduzir o padding interno do formulário */
-        max-width: 90%; /* Usar até 90% da largura da tela */
+        padding: 1rem; 
+        max-width: 90%; 
       }
     
       .title {
-        font-size: 22px; /* Ajustar o tamanho da fonte do título */
+        font-size: 22px; 
       }
     
       .input {
-        font-size: medium; /* Ajustar o tamanho da fonte dos inputs */
-        padding: 15px 10px; /* Ajustar o padding dos inputs para serem mais compactos */
+        font-size: medium; 
+        padding: 15px 10px; 
       }
     
       .submit {
-        font-size: 14px; /* Reduzir o tamanho da fonte do botão */
-        padding: 12px; /* Ajustar o padding do botão para ser mais compacto */
+        font-size: 14px; 
+        padding: 12px; 
       }
 }
