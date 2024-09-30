@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="css/header.css"/>
+    <link rel="stylesheet" href="css/form.css"/>
     <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
@@ -15,7 +16,42 @@
         <h1>Simula Aposentadoria</h1>
     </header>
 
-    <main></main>
+    <main>
+
+        <section class="main__form">
+             
+            <form class="form">
+                <p class="title">Cadastro </p>
+                <p class="message">Informe seus dados </p>
+                    
+                <label>
+                    <input class="input" type="text" placeholder="" required="">
+                    <span>Nome completo</span>
+                </label> 
+                <label>
+                    <input class="input" type="data" placeholder="" required="">
+                    <span>Data de nascimento</span>
+                </label>
+                    
+                <label>
+                    <input class="input" type="text" placeholder="" required="">
+                    <span>CPF</span>
+                </label>
+                <label>
+                    <input class="input" type="number" placeholder="" required="">
+                    <span>Salário</span>
+                </label>
+                <label>
+                    <input class="input" type="data" placeholder="" required="">
+                    <span>Tempo de contribuição</span>
+                </label>
+            
+                <button class="submit">Enviar</button>
+                
+            </form>
+        </section>
+
+    </main>
     
 </body>
 </html>
