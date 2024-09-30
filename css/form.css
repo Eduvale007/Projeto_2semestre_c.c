@@ -143,3 +143,28 @@
       opacity: 0;
     }
   }
+
+  @media screen and (max-width:750px) {
+    .main__form {
+        padding: 2rem; /* Reduzir o padding para telas menores */
+      }
+    
+      .form {
+        padding: 1rem; /* Reduzir o padding interno do formulário */
+        max-width: 90%; /* Usar até 90% da largura da tela */
+      }
+    
+      .title {
+        font-size: 22px; /* Ajustar o tamanho da fonte do título */
+      }
+    
+      .input {
+        font-size: medium; /* Ajustar o tamanho da fonte dos inputs */
+        padding: 15px 10px; /* Ajustar o padding dos inputs para serem mais compactos */
+      }
+    
+      .submit {
+        font-size: 14px; /* Reduzir o tamanho da fonte do botão */
+        padding: 12px; /* Ajustar o padding do botão para ser mais compacto */
+      }
+}
