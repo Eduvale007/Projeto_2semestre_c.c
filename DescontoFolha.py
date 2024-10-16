@@ -36,6 +36,7 @@ def enviar_dados():
         return redirect(url_for('index'))  # Redireciona se não preencher todos os campos
 
     try:
+        # Verificar formato de data
         datetime.strptime(data_nascimento, '%Y-%m-%d')
         datetime.strptime(data_contratacao, '%Y-%m-%d')
     except ValueError:
@@ -49,6 +50,7 @@ def enviar_dados():
 
     cursor = conexao.cursor()
     try:
+        # Inserir os dados na tabela Funcionario
         sql_funcionario = "INSERT INTO funcionario (Nome, Dt_nascimento, Cpf, Dt_contratacao, Anos_contribuicao) VALUES (%s, %s, %s, %s, %s)"
         valores_funcionario = (nome, data_nascimento, cpf, data_contratacao, anos_contribuicao)
         cursor.execute(sql_funcionario, valores_funcionario)
@@ -65,7 +67,19 @@ def enviar_dados():
         conexao.commit()
 
         print("Dados de salário inseridos com sucesso!")
-        
+
+        # Calcular o valor estimado da aposentadoria
+        fator = 0.8  # Defina seu fator aqui
+        valor_estimado = float(salario) * float(anos_contribuicao) * fator
+
+        # Inserir o valor estimado na tabela Aposentadoria
+        sql_aposentadoria = "INSERT INTO aposentadoria (Funcionario_id, Valor_estimado, Dt_calculo) VALUES (%s, %s, CURDATE())"
+        valores_aposentadoria = (funcionario_id, valor_estimado)
+        cursor.execute(sql_aposentadoria, valores_aposentadoria)
+        conexao.commit()
+
+        print("Valor estimado da aposentadoria inserido com sucesso!")
+
     except mysql.connector.Error as erro:
         print(f"Erro ao inserir dados: {erro}")
         return redirect(url_for('index'))  # Redireciona em caso de erro
