@@ -1,5 +1,4 @@
-
-from flask import Flask, request, jsonify, render_template
+from flask import Flask, request, redirect, url_for, render_template
 import mysql.connector
 from datetime import datetime
 
@@ -26,7 +25,6 @@ def index():
 
 @app.route('/enviar', methods=['POST'])
 def enviar_dados():
-    # Capturar os dados enviados pelo formulário
     nome = request.form.get('name')
     data_nascimento = request.form.get('dataNascimento')
     cpf = request.form.get('cpf')
@@ -34,19 +32,23 @@ def enviar_dados():
     data_contratacao = request.form.get('dataContratacao')
     anos_contribuicao = request.form.get('tempoContribuicao')
 
-    # Verificar se todos os campos foram preenchidos
     if not nome or not data_nascimento or not cpf or not salario or not data_contratacao or not anos_contribuicao:
-        return jsonify({'erro': 'Por favor, preencha todos os campos.'}), 400
+        return redirect(url_for('index'))  # Redireciona se não preencher todos os campos
+
+    try:
+        datetime.strptime(data_nascimento, '%Y-%m-%d')
+        datetime.strptime(data_contratacao, '%Y-%m-%d')
+    except ValueError:
+        return redirect(url_for('index'))  # Redireciona se o formato da data for inválido
 
     # Conectar ao banco
     conexao = conectar_banco()
     if not conexao:
         print("Erro ao conectar ao banco de dados.")
-        return jsonify({'erro': 'Erro ao conectar ao banco de dados.'}), 500
+        return redirect(url_for('index'))  # Redireciona em caso de erro
 
     cursor = conexao.cursor()
     try:
-        # Inserir os dados na tabela Funcionario
         sql_funcionario = "INSERT INTO funcionario (Nome, Dt_nascimento, Cpf, Dt_contratacao, Anos_contribuicao) VALUES (%s, %s, %s, %s, %s)"
         valores_funcionario = (nome, data_nascimento, cpf, data_contratacao, anos_contribuicao)
         cursor.execute(sql_funcionario, valores_funcionario)
@@ -63,15 +65,16 @@ def enviar_dados():
         conexao.commit()
 
         print("Dados de salário inseridos com sucesso!")
-
+        
     except mysql.connector.Error as erro:
         print(f"Erro ao inserir dados: {erro}")
-        return jsonify({'erro': f'Erro ao inserir dados: {erro}'}), 500
+        return redirect(url_for('index'))  # Redireciona em caso de erro
     finally:
         cursor.close()
         conexao.close()
 
-    return jsonify({'mensagem': 'Dados inseridos com sucesso!'}), 200
+    # Redireciona para a página inicial após a inserção
+    return redirect(url_for('index'))
 
 if __name__ == '__main__':
     app.run(debug=True)
