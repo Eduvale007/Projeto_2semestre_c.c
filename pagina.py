@@ -22,7 +22,7 @@ def conectar_banco():
 
 @app.route('/')
 def home():
-    return render_template('form.html')
+    return render_template('index.html')
 
 @app.route('/enviar', methods=['POST'])
 def enviar_dados():
