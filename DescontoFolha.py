@@ -1,4 +1,4 @@
-from flask import Flask, request, redirect, url_for, render_template
+from flask import Flask, request, redirect, url_for, render_template, jsonify
 import mysql.connector
 from datetime import datetime
 
@@ -28,25 +28,22 @@ def enviar_dados():
     nome = request.form.get('name')
     data_nascimento = request.form.get('dataNascimento')
     cpf = request.form.get('cpf')
-    salario = request.form.get('salario')
+    salario = float(request.form.get('salario'))
     data_contratacao = request.form.get('dataContratacao')
-    anos_contribuicao = request.form.get('tempoContribuicao')
+    anos_contribuicao = int(request.form.get('tempoContribuicao'))
 
     if not nome or not data_nascimento or not cpf or not salario or not data_contratacao or not anos_contribuicao:
         return redirect(url_for('index'))  # Redireciona se não preencher todos os campos
 
     try:
-        # Verificar formato de data
         datetime.strptime(data_nascimento, '%Y-%m-%d')
         datetime.strptime(data_contratacao, '%Y-%m-%d')
     except ValueError:
         return redirect(url_for('index'))  # Redireciona se o formato da data for inválido
 
-    # Conectar ao banco
     conexao = conectar_banco()
     if not conexao:
-        print("Erro ao conectar ao banco de dados.")
-        return redirect(url_for('index'))  # Redireciona em caso de erro
+        return redirect(url_for('index'))
 
     cursor = conexao.cursor()
     try:
@@ -56,9 +53,7 @@ def enviar_dados():
         cursor.execute(sql_funcionario, valores_funcionario)
         conexao.commit()
 
-        # Obter o ID do funcionário recém-inserido
         funcionario_id = cursor.lastrowid
-        print(f"ID do funcionário inserido: {funcionario_id}")
 
         # Inserir o salário na tabela Salario
         sql_salario = "INSERT INTO salario (funcionario_id, Valor_Bruto, Dt_ajuste) VALUES (%s, %s, CURDATE())"
@@ -66,11 +61,9 @@ def enviar_dados():
         cursor.execute(sql_salario, valores_salario)
         conexao.commit()
 
-        print("Dados de salário inseridos com sucesso!")
-
         # Calcular o valor estimado da aposentadoria
-        fator = 0.8  # Defina seu fator aqui
-        valor_estimado = float(salario) * float(anos_contribuicao) * fator
+        fator = 0.08  # Valor do cálculo aqui 
+        valor_estimado = (salario * fator) * anos_contribuicao
 
         # Inserir o valor estimado na tabela Aposentadoria
         sql_aposentadoria = "INSERT INTO aposentadoria (Funcionario_id, Valor_estimado, Dt_calculo) VALUES (%s, %s, CURDATE())"
@@ -78,17 +71,14 @@ def enviar_dados():
         cursor.execute(sql_aposentadoria, valores_aposentadoria)
         conexao.commit()
 
-        print("Valor estimado da aposentadoria inserido com sucesso!")
+        return jsonify({'valorEstimado': valor_estimado})
 
     except mysql.connector.Error as erro:
         print(f"Erro ao inserir dados: {erro}")
-        return redirect(url_for('index'))  # Redireciona em caso de erro
+        return redirect(url_for('index'))
     finally:
         cursor.close()
         conexao.close()
-
-    # Redireciona para a página inicial após a inserção
-    return redirect(url_for('index'))
 
 if __name__ == '__main__':
     app.run(debug=True)

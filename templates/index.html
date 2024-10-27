@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/header.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/form.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/header.css') }}"/>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/form.css') }}"/>
     <title>Simulação Aposentadoria</title>
 </head>
 <body>
@@ -12,36 +12,83 @@
         <img src="https://images.emojiterra.com/google/noto-emoji/unicode-15.1/color/1024px/1f1e7-1f1f7.png" alt="">
         <h1>Simula Aposentadoria</h1>
     </header>
+
     <main>
         <section class="main__form">
-            <form class="form" action="/enviar" method="post">
+            <form class="form" id="formCadastro">
+                <p class="title">Cadastro</p>
                 <label>
-                    <input class="input" id="name" name="name" type="text" placeholder="" required="">
+                    <input class="input" name="name" type="text" required>
                     <span>Nome completo</span>
                 </label>
                 <label>
-                    <input class="input" id="dataNascimento" name="dataNascimento" type="date" placeholder="" required="">
+                    <input class="input" name="dataNascimento" type="date" required>
                     <span>Data de nascimento</span>
                 </label>
                 <label>
-                    <input class="input" id="cpf" name="cpf" type="text" placeholder="" required="">
+                    <input class="input" name="cpf" type="text" required>
                     <span>CPF</span>
                 </label>
                 <label>
-                    <input class="input" id="salario" name="salario" type="number" placeholder="" required="">
+                    <input class="input" name="salario" type="number" required>
                     <span>Salário</span>
                 </label>
                 <label>
-                    <input class="input" id="dataContratacao" name="dataContratacao" type="date" placeholder="" required="">
+                    <input class="input" name="dataContratacao" type="date" required>
                     <span>Data de Contratação</span>
                 </label>
                 <label>
-                    <input class="input" id="tempoContribuicao" name="tempoContribuicao" type="number" placeholder="" required="">
-                    <span>Tempo de contribuição (anos)</span>
+                    <input class="input" name="tempoContribuicao" type="number" required>
+                    <span>Anos de Contribuição</span>
                 </label>
-                <button class="submit">Enviar</button>
+                <button type="submit" class="submit">Enviar</button>
             </form>
         </section>
     </main>
+
+    <script>
+        document.getElementById('formCadastro').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const formData = new FormData(event.target);
+
+            fetch('/enviar', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.valorEstimado) {
+                    alert(`Valor Estimado da Aposentadoria: R$ ${data.valorEstimado.toFixed(2)}`);
+                } else {
+                    alert('Erro ao calcular a aposentadoria.');
+                }
+            })
+            .catch(error => {
+                console.error('Erro:', error);
+            });
+        });
+
+        document.addEventListener("DOMContentLoaded", function() {
+        const form = document.querySelector("form");
+
+        form.addEventListener("submit", function(event) {
+            event.preventDefault();  
+            const formData = new FormData(form);
+            
+            fetch(form.action, {
+                method: "POST",
+                body: formData
+            }).then(response => {
+                if (response.redirected) {
+                    window.location.href = response.url;
+                }
+                // Limpa o formulário após o envio
+                form.reset();
+            }).catch(error => {
+                console.error("Erro ao enviar o formulário:", error);
+            });
+        });
+    });
+    </script>
 </body>
 </html>
