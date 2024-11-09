@@ -1,0 +1,17 @@
+[build]
+  base = "."  # Definir o diretório raiz para os arquivos
+  command = "pip install -r requirements.txt"
+  publish = "templates"  # Ou "static", dependendo de onde estão os arquivos front-end
+  functions = "netlify/functions"
+
+[build.environment]
+  FLASK_APP = "app.py"
+  FLASK_ENV = "production"
+  DB_HOST = "127.0.0.1"  # Ajuste para o host correto, se necessário
+  DB_USER = "root"
+  DB_PASSWORD = "Bololo@10"
+  DB_NAME = "aposentadoriadb"
+  DB_PORT = "3306"
+
+[[plugins]]
+  package = "@netlify/plugin-functions-installation"
