@@ -4,12 +4,12 @@ services:
     env: python
     plan: free
     buildCommand: "pip install -r requirements.txt"
-    startCommand: "gunicorn app:app"
+    startCommand: "gunicorn main:app"  # Altere "main" para o nome correto do seu arquivo
     envVars:
       - key: FLASK_ENV
         value: production
       - key: DB_HOST
-        value: 127.0.0.1
+        value: <HOST_DO_BANCO_NO_RENDER>
       - key: DB_USER
         value: root
       - key: DB_PASSWORD
