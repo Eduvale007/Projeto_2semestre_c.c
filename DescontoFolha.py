@@ -1,19 +1,27 @@
+from dotenv import load_dotenv
+import os
 from flask import Flask, request, redirect, url_for, render_template, jsonify
 import mysql.connector
 from datetime import datetime
 
+load_dotenv()
+
 app = Flask(__name__)
+
+# Configurar o ambiente
+app.config['ENV'] = os.getenv("FLASK_ENV", "development")
 
 def conectar_banco():
     try:
         conexao = mysql.connector.connect(
-            host="127.0.0.1",
-            user="root",
-            password="Bololo@10",
-            database="aposentadoriadb",
-            port=3306
+            host=os.getenv("DB_HOST"),
+            user=os.getenv("DB_USER"),
+            password=os.getenv("DB_PASSWORD"),
+            database=os.getenv("DB_NAME"),
+            port=int(os.getenv("DB_PORT"))
         )
         if conexao.is_connected():
+            print("Conexão com o banco de dados bem-sucedida")
             return conexao
     except mysql.connector.Error as erro:
         print(f"Erro ao conectar ao banco de dados: {erro}")
@@ -43,7 +51,7 @@ def enviar_dados():
 
     conexao = conectar_banco()
     if not conexao:
-        return redirect(url_for('index'))
+        return redirect(url_for('index'))  # Ou aqui você poderia exibir uma mensagem de erro na tela
 
     cursor = conexao.cursor()
     try:
