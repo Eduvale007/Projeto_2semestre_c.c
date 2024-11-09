@@ -89,4 +89,6 @@ def enviar_dados():
         conexao.close()
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    # Adicionando configuração da porta dinâmica para produção
+    port = int(os.environ.get("PORT", 5000))  # Obtém a porta de ambiente, se disponível
+    app.run(host="0.0.0.0", port=port)  # Executa a aplicação na porta especificada

@@ -4,12 +4,12 @@ services:
     env: python
     plan: free
     buildCommand: "pip install -r requirements.txt"
-    startCommand: "gunicorn main:app"  # Altere "main" para o nome correto do seu arquivo
+    startCommand: "gunicorn app:app"
     envVars:
       - key: FLASK_ENV
         value: production
       - key: DB_HOST
-        value: <HOST_DO_BANCO_NO_RENDER>
+        value: 127.0.0.1
       - key: DB_USER
         value: root
       - key: DB_PASSWORD
@@ -17,4 +17,4 @@ services:
       - key: DB_NAME
         value: aposentadoriadb
       - key: DB_PORT
-        value: "3306"
+        value: "3306"  # Valor da porta como string
